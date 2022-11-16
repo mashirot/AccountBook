@@ -7,8 +7,9 @@ import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import ski.mashiro.AccountBook
 import ski.mashiro.ski.mashiro.pojo.Deal
 import ski.mashiro.ski.mashiro.util.Utils
+import java.util.*
 
-class Income : SimpleCommand(AccountBook, "+") {
+class Income: SimpleCommand(AccountBook, "+") {
     @ExperimentalCommandDescriptors
     @ConsoleExperimentalApi
     override val prefixOptional: Boolean
@@ -16,15 +17,27 @@ class Income : SimpleCommand(AccountBook, "+") {
 
     @Handler
     suspend fun income(sender: CommandSender, money: Double) {
-        Utils.dealData.add(Deal(money))
-        Utils.undoFlag = false
+        if (!Utils.userData.containsKey(sender.subject!!.id)) {
+            val dealData = Vector<Deal>(25)
+            dealData.add(Deal(money))
+            Utils.userData[sender.subject!!.id] = dealData
+            sender.sendMessage("Insert Success")
+            return
+        }
+        Utils.userData[sender.subject!!.id]!!.add(Deal(money))
         sender.sendMessage("Insert Success")
     }
 
     @Handler
     suspend fun income(sender: CommandSender, money: Double, reason : String) {
-        Utils.dealData.add(Deal(money))
-        Utils.undoFlag = false
-        sender.sendMessage("Insert Failed")
+        if (!Utils.userData.containsKey(sender.subject!!.id)) {
+            val dealData = Vector<Deal>(25)
+            dealData.add(Deal(money, reason))
+            Utils.userData[sender.subject!!.id] = dealData
+            sender.sendMessage("Insert Success")
+            return
+        }
+        Utils.userData[sender.subject!!.id]!!.add(Deal(money, reason))
+        sender.sendMessage("Insert Success")
     }
 }

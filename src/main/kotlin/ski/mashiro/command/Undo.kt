@@ -15,15 +15,16 @@ class Undo : SimpleCommand(AccountBook, "undo") {
 
     @Handler
     suspend fun undo(sender: CommandSender) {
-        if (Utils.dealData.isEmpty()) {
-            sender.sendMessage("Undo Failed")
+        if (Utils.userData.isEmpty() || !Utils.userData.containsKey(sender.subject!!.id)) {
+            sender.sendMessage("Undo Failed, cause by qq not exist in map")
             return
         }
-        if (!Utils.undoFlag) {
-            Utils.dealData.removeAt(Utils.dealData.size - 1)
-            sender.sendMessage("Undo Success")
-            Utils.undoFlag = true
+        if (Utils.userData[sender.subject!!.id]!!.isEmpty()) {
+            sender.sendMessage("Undo Failed, cause by list is empty")
+            return
         }
+        Utils.userData[sender.subject!!.id]!!.removeAt(Utils.userData.size - 1)
+        sender.sendMessage("Undo Success")
     }
 
 }

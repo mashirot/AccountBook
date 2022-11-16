@@ -5,15 +5,26 @@ import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import ski.mashiro.AccountBook
+import ski.mashiro.ski.mashiro.util.Utils
+import kotlin.math.absoluteValue
 
-class Inquire : SimpleCommand(AccountBook, "=") {
+class Inquire: SimpleCommand(AccountBook, "=") {
     @ExperimentalCommandDescriptors
     @ConsoleExperimentalApi
     override val prefixOptional: Boolean
         get() = true
 
     @Handler
-    fun inquire(sender: CommandSender, num: Int) {
-        println("输入了：$num")
+    suspend fun inquire(sender: CommandSender, days: Int) {
+        if (days <= 0) {
+            sender.sendMessage("输入有误，天数大于0")
+            return
+        }
+        val rs = Utils.select(days, sender.subject!!.id)
+        if (rs == null) {
+            AccountBook.logger.info("用户 ${sender.subject!!.id}, 数据库连接失败或对应表未找到")
+            return
+        }
+        sender.sendMessage("过去 ${rs.days} 天, 支出 ${rs.outMoney.absoluteValue} 元, 收入 ${rs.inMoney}, 结余 ${rs.totalMoney} 元")
     }
 }

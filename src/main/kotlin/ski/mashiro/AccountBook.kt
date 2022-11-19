@@ -8,6 +8,7 @@ import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import ski.mashiro.command.*
 import ski.mashiro.file.Config
 import ski.mashiro.util.ThreadManager
+import ski.mashiro.util.Update
 
 object AccountBook : KotlinPlugin(
     JvmPluginDescription(
@@ -28,6 +29,7 @@ object AccountBook : KotlinPlugin(
         CommandManager.registerCommand(Undo())
         CommandManager.registerCommand(Admin())
         AbstractPermitteeId.AnyFriend.permit(parentPermission)
+        Update.checkUpdate()
         logger.info("[AccountBook] 加载成功")
     }
 

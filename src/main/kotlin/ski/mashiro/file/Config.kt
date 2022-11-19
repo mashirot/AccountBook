@@ -15,6 +15,7 @@ class Config {
             if (!configFile.exists()) {
                 if (configFile.createNewFile()) {
                     FileUtils.writeStringToFile(configFile, Utils.yamlMapper.writeValueAsString(Config(AccountBook.version.toString(), true)), "utf-8")
+                    config = Utils.yamlMapper.readValue(FileUtils.readFileToString(configFile, "utf-8"), Config::class.java)
                 }
                 return
             }

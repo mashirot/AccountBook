@@ -1,11 +1,11 @@
-package ski.mashiro.ski.mashiro.command
+package ski.mashiro.command
 
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import ski.mashiro.AccountBook
-import ski.mashiro.ski.mashiro.util.Utils
+import ski.mashiro.util.Utils
 
 class Undo : SimpleCommand(AccountBook, "undo") {
     @ExperimentalCommandDescriptors
@@ -15,6 +15,9 @@ class Undo : SimpleCommand(AccountBook, "undo") {
 
     @Handler
     suspend fun undo(sender: CommandSender) {
+        if (Utils.isUserInWhitelist(sender.subject!!.id)) {
+            return
+        }
         if (Utils.userData.isEmpty() || !Utils.userData.containsKey(sender.subject!!.id)) {
             sender.sendMessage("Undo Failed, cause by qq not exist in map")
             return

@@ -5,9 +5,9 @@ import net.mamoe.mirai.console.permission.AbstractPermitteeId
 import net.mamoe.mirai.console.permission.PermissionService.Companion.permit
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
-import ski.mashiro.ski.mashiro.command.*
-import ski.mashiro.ski.mashiro.file.Config
-import ski.mashiro.ski.mashiro.util.ThreadManager
+import ski.mashiro.command.*
+import ski.mashiro.file.Config
+import ski.mashiro.util.ThreadManager
 
 object AccountBook : KotlinPlugin(
     JvmPluginDescription(
@@ -26,6 +26,7 @@ object AccountBook : KotlinPlugin(
         CommandManager.registerCommand(Income())
         CommandManager.registerCommand(Inquire())
         CommandManager.registerCommand(Undo())
+        CommandManager.registerCommand(Admin())
         AbstractPermitteeId.AnyFriend.permit(parentPermission)
         logger.info("[AccountBook] 加载成功")
     }

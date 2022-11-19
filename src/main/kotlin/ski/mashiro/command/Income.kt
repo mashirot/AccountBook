@@ -1,12 +1,12 @@
-package ski.mashiro.ski.mashiro.command
+package ski.mashiro.command
 
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import ski.mashiro.AccountBook
-import ski.mashiro.ski.mashiro.pojo.Deal
-import ski.mashiro.ski.mashiro.util.Utils
+import ski.mashiro.pojo.Deal
+import ski.mashiro.util.Utils
 import java.util.*
 
 class Income: SimpleCommand(AccountBook, "+") {
@@ -17,6 +17,9 @@ class Income: SimpleCommand(AccountBook, "+") {
 
     @Handler
     suspend fun income(sender: CommandSender, money: Double) {
+        if (Utils.isUserInWhitelist(sender.subject!!.id)) {
+            return
+        }
         if (!Utils.userData.containsKey(sender.subject!!.id)) {
             val dealData = Vector<Deal>(25)
             dealData.add(Deal(money))
@@ -30,6 +33,9 @@ class Income: SimpleCommand(AccountBook, "+") {
 
     @Handler
     suspend fun income(sender: CommandSender, money: Double, reason : String) {
+        if (Utils.isUserInWhitelist(sender.subject!!.id)) {
+            return
+        }
         if (!Utils.userData.containsKey(sender.subject!!.id)) {
             val dealData = Vector<Deal>(25)
             dealData.add(Deal(money, reason))

@@ -1,4 +1,4 @@
-package ski.mashiro.ski.mashiro.pojo
+package ski.mashiro.pojo
 
 import java.util.Date
 

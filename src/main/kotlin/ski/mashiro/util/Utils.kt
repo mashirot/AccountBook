@@ -1,20 +1,19 @@
-package ski.mashiro.ski.mashiro.util
+package ski.mashiro.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
-import ski.mashiro.ski.mashiro.file.Config
-import ski.mashiro.ski.mashiro.pojo.Deal
-import ski.mashiro.ski.mashiro.pojo.InsertResult
-import ski.mashiro.ski.mashiro.pojo.SelectResult
+import ski.mashiro.file.Config
+import ski.mashiro.pojo.InsertResult
+import ski.mashiro.pojo.SelectResult
+import ski.mashiro.pojo.Deal
 import java.sql.Date
 import java.sql.DriverManager
 import java.util.*
-import kotlin.collections.HashMap
 
 class Utils {
     companion object {
-        val userData: HashMap<Long, Vector<Deal>> = HashMap(5)
+        val userData: MutableMap<Long, Vector<Deal>> = HashMap(5)
         val yamlMapper: ObjectMapper = YAMLMapper().registerModule(kotlinModule())
 
         fun insert(qq: Long) : InsertResult? {
@@ -88,13 +87,15 @@ class Utils {
                         for (i in 1..days) {
                             prepareStatement.setDate(1, Date(initTime.time.time))
                             val result = prepareStatement.executeQuery()
-                            while (result.next()) {
-                                val money = result.getDouble("money")
-                                if (money >= 0) {
-                                    inMoney += money
-                                    continue
+                            result.use {
+                                while (result.next()) {
+                                    val money = result.getDouble("money")
+                                    if (money >= 0) {
+                                        inMoney += money
+                                        continue
+                                    }
+                                    outMoney += money
                                 }
-                                outMoney += money
                             }
                             initTime.set(Calendar.DAY_OF_MONTH, initTime.get(Calendar.DAY_OF_MONTH) - 1)
                         }
@@ -106,6 +107,8 @@ class Utils {
             }
             return null
         }
+
+        fun isUserInWhitelist(qq: Long): Boolean = !Config.config.whiteList.contains(qq)
 
     }
 }

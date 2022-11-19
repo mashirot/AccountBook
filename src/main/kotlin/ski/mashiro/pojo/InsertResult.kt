@@ -1,4 +1,4 @@
-package ski.mashiro.ski.mashiro.pojo
+package ski.mashiro.pojo
 
 data class InsertResult(
     val successNum: Int,

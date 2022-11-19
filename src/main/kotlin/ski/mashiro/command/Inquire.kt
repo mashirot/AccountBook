@@ -1,11 +1,11 @@
-package ski.mashiro.ski.mashiro.command
+package ski.mashiro.command
 
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import ski.mashiro.AccountBook
-import ski.mashiro.ski.mashiro.util.Utils
+import ski.mashiro.util.Utils
 import kotlin.math.absoluteValue
 
 class Inquire: SimpleCommand(AccountBook, "=") {
@@ -16,6 +16,9 @@ class Inquire: SimpleCommand(AccountBook, "=") {
 
     @Handler
     suspend fun inquire(sender: CommandSender, days: Int) {
+        if (Utils.isUserInWhitelist(sender.subject!!.id)) {
+            return
+        }
         if (days <= 0) {
             sender.sendMessage("输入有误，天数大于0")
             return

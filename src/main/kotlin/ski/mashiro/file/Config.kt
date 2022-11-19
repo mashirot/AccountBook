@@ -1,10 +1,10 @@
-package ski.mashiro.ski.mashiro.file
+package ski.mashiro.file
 
 import net.mamoe.mirai.console.plugin.version
 import org.apache.commons.io.FileUtils
 import ski.mashiro.AccountBook
-import ski.mashiro.ski.mashiro.pojo.Config
-import ski.mashiro.ski.mashiro.util.Utils
+import ski.mashiro.util.Utils
+import ski.mashiro.pojo.Config
 import java.io.File
 
 class Config {

@@ -57,6 +57,14 @@ class Admin: CompositeCommand(
         Config.config.whiteList.stream().forEach { qq -> whitelist += if (qq != Config.config.whiteList.last()) "$qq\n" else "$qq" }
         sender.sendMessage(whitelist)
     }
-
+    @SubCommand("reload")
+    suspend fun reload(sender: CommandSender) {
+        if (sender.subject!!.id != Config.config.owner) {
+            sender.sendMessage("无权限")
+            return
+        }
+        Config.loadConfig()
+        sender.sendMessage("重载成功")
+    }
 
 }

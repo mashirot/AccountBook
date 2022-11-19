@@ -3,6 +3,8 @@ package ski.mashiro.command
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.CompositeCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
+import net.mamoe.mirai.console.command.isConsole
+import net.mamoe.mirai.console.command.isNotConsole
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import ski.mashiro.AccountBook
 import ski.mashiro.file.Config
@@ -57,6 +59,14 @@ class Admin: CompositeCommand(
         Config.config.whiteList.stream().forEach { qq -> whitelist += if (qq != Config.config.whiteList.last()) "$qq\n" else "$qq" }
         sender.sendMessage(whitelist)
     }
-
+    @SubCommand("reload")
+    suspend fun reload(sender: CommandSender) {
+        if (sender.isNotConsole() || sender.subject!!.id != Config.config.owner) {
+            sender.sendMessage("无权限")
+            return
+        }
+        Config.loadConfig()
+        sender.sendMessage("重载成功")
+    }
 
 }

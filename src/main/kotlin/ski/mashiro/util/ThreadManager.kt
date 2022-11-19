@@ -16,7 +16,7 @@ class ThreadManager {
             checkout()
         }
         private fun logResult() {
-            CoroutineScope(Dispatchers.Default).launch() {
+            CoroutineScope(Dispatchers.Default).launch {
                 initTime.set(Calendar.DAY_OF_MONTH, initTime.get(Calendar.DAY_OF_MONTH) + 1)
                 initTime.set(Calendar.HOUR_OF_DAY, 0)
                 initTime.set(Calendar.MINUTE, 0)
@@ -24,6 +24,9 @@ class ThreadManager {
                 initTime.set(Calendar.MILLISECOND, 0)
                 delay(initTime.timeInMillis - System.currentTimeMillis())
                 while (true) {
+                    if (Utils.userData.isEmpty()) {
+                        continue
+                    }
                     for (qq in Utils.userData.keys) {
                         val rs = Utils.insert(qq)
                         if (rs == null) {
@@ -32,18 +35,18 @@ class ThreadManager {
                         }
                         AccountBook.logger.info("用户 $qq, 已成功向数据库写入 ${rs.successNum} 个数据, ${rs.failedNum} 个写入失败")
                     }
-                    delay(24 *60 *60 * 1000L)
+                    delay(24 * 60 * 60 * 1000L)
                 }
             }
         }
         private fun checkout() {
-            CoroutineScope(Dispatchers.Default).launch() {
+            CoroutineScope(Dispatchers.Default).launch {
                 nextCheckoutDay.set(Calendar.HOUR_OF_DAY, 0)
                 nextCheckoutDay.set(Calendar.MINUTE, 0)
                 nextCheckoutDay.set(Calendar.SECOND, 0)
                 nextCheckoutDay.set(Calendar.MILLISECOND, 0)
                 if (nextCheckoutDay.get(Calendar.DAY_OF_MONTH) > Config.config.checkoutDay) {
-                    nextCheckoutDay.set(Calendar.MONTH, initTime.get(Calendar.MONTH) + 1)
+                    nextCheckoutDay.set(Calendar.MONTH, nextCheckoutDay.get(Calendar.MONTH) + 1)
                     nextCheckoutDay.set(Calendar.DAY_OF_MONTH, Config.config.checkoutDay)
                 } else {
                     nextCheckoutDay.set(Calendar.DAY_OF_MONTH, Config.config.checkoutDay)

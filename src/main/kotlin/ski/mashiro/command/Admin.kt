@@ -4,6 +4,7 @@ import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.CompositeCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.command.isConsole
+import net.mamoe.mirai.console.command.isNotConsole
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import ski.mashiro.AccountBook
 import ski.mashiro.file.Config
@@ -76,6 +77,30 @@ class Admin: CompositeCommand(
             return
         }
         sender.sendMessage("已成功向数据库写入 ${rs.successNum} 个数据, ${rs.failedNum} 个写入失败")
+    }
+    suspend fun setCheckoutDay(sender: CommandSender, day: Int) {
+        if (sender.subject!!.id != Config.config.owner || sender.isNotConsole()) {
+            sender.sendMessage("无权限")
+            return
+        }
+        Config.config.checkoutDay = day
+        sender.sendMessage("结算日期修改为：$day")
+    }
+    suspend fun setBotQQ(sender: CommandSender, qq: Long) {
+        if (sender.isNotConsole()) {
+            sender.sendMessage("无权限")
+            return
+        }
+        Config.config.bot = qq
+        sender.sendMessage("BotQQ修改为：$qq")
+    }
+    suspend fun setOwner(sender: CommandSender, qq: Long) {
+        if (sender.isNotConsole()) {
+            sender.sendMessage("无权限")
+            return
+        }
+        Config.config.owner = qq
+        sender.sendMessage("Owner修改为：$qq")
     }
     @SubCommand("reload")
     suspend fun reload(sender: CommandSender) {

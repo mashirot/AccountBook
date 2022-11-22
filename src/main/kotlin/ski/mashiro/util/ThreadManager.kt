@@ -31,7 +31,7 @@ class ThreadManager {
                         val rs = Utils.insert(qq)
                         if (rs == null) {
                             AccountBook.logger.info("数据库连接失败")
-                            return@launch
+                            continue
                         }
                         AccountBook.logger.info("用户 $qq, 已成功向数据库写入 ${rs.successNum} 个数据, ${rs.failedNum} 个写入失败")
                     }
@@ -57,7 +57,7 @@ class ThreadManager {
                         val rs = Utils.select(30, qq)
                         if (rs == null) {
                             AccountBook.logger.info("用户 $qq, 数据库连接失败或对应表未找到")
-                            return@launch
+                            continue
                         }
                         val bot = Bot.getInstance(Config.config.bot)
                         for (friend in bot.friends) {

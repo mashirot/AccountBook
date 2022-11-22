@@ -17,6 +17,8 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
     implementation("com.mysql:mysql-connector-j:8.0.31")
+    // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
+    implementation("com.google.protobuf:protobuf-java:3.21.9")
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation("commons-io:commons-io:2.11.0")
     // https://mvnrepository.com/artifact/junit/junit

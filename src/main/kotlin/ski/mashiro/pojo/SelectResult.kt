@@ -2,7 +2,7 @@ package ski.mashiro.pojo
 
 data class SelectResult(
     val days: Int,
-    val inMoney: Double,
-    val outMoney: Double,
-    val totalMoney: Double
+    var inMoney: Double,
+    var outMoney: Double,
+    var totalMoney: Double
 )

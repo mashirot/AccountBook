@@ -16,8 +16,7 @@ class Utils {
     companion object {
         val userData: MutableMap<Long, Vector<Deal>> = HashMap(5)
         val yamlMapper: ObjectMapper = YAMLMapper().registerModule(kotlinModule())
-        val numFormat = NumberFormat.getCurrencyInstance()
-
+        val currency: NumberFormat = NumberFormat.getCurrencyInstance(Locale.CHINA)
 
         fun insert(qq: Long) : InsertResult? {
             val dealData = userData[qq] ?: return null

@@ -9,12 +9,15 @@ import ski.mashiro.pojo.SelectResult
 import ski.mashiro.pojo.Deal
 import java.sql.Date
 import java.sql.DriverManager
+import java.text.NumberFormat
 import java.util.*
 
 class Utils {
     companion object {
         val userData: MutableMap<Long, Vector<Deal>> = HashMap(5)
         val yamlMapper: ObjectMapper = YAMLMapper().registerModule(kotlinModule())
+        val numFormat = NumberFormat.getCurrencyInstance()
+
 
         fun insert(qq: Long) : InsertResult? {
             val dealData = userData[qq] ?: return null

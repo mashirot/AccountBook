@@ -64,7 +64,7 @@ class ThreadManager {
                             if (!Config.config.whiteList.contains(friend.id)) {
                                 continue
                             }
-                            friend.sendMessage("过去 ${rs.days} 天, 支出 ${rs.outMoney.absoluteValue} 元, 收入 ${rs.inMoney}, 结余 ${rs.totalMoney} 元")
+                            friend.sendMessage("过去 ${rs.days} 天, 支出 ${Utils.numFormat.format(rs.outMoney.absoluteValue)} 元, 收入 ${Utils.numFormat.format(rs.inMoney)} 元, 结余 ${Utils.numFormat.format(rs.totalMoney)} 元")
                         }
                     }
                     delay(30 * 24 * 60 * 60 * 1000L)

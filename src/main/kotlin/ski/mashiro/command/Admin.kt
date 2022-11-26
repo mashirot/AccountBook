@@ -8,6 +8,7 @@ import net.mamoe.mirai.console.command.isNotConsole
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import ski.mashiro.AccountBook
 import ski.mashiro.file.Config
+import ski.mashiro.jdbc.Jdbc
 import ski.mashiro.util.Utils
 
 class Admin: CompositeCommand(
@@ -67,11 +68,11 @@ class Admin: CompositeCommand(
             sender.sendMessage("无权限")
             return
         }
-        if (!Utils.userData.contains(qq)) {
+        if (!Utils.userDealData.contains(qq)) {
             sender.sendMessage("暂无数据需要写入")
             return
         }
-        val rs = Utils.insert(qq)
+        val rs = Jdbc.insert(qq)
         if (rs == null) {
             AccountBook.logger.info("数据库连接失败")
             return

@@ -4,6 +4,7 @@ import kotlinx.coroutines.*
 import net.mamoe.mirai.Bot
 import ski.mashiro.AccountBook
 import ski.mashiro.file.Config
+import ski.mashiro.jdbc.Jdbc
 import java.util.*
 import kotlin.math.absoluteValue
 
@@ -24,11 +25,11 @@ class ThreadManager {
                 initTime.set(Calendar.MILLISECOND, 0)
                 delay(initTime.timeInMillis - System.currentTimeMillis())
                 while (true) {
-                    if (Utils.userData.isEmpty()) {
+                    if (Utils.userDealData.isEmpty()) {
                         continue
                     }
-                    for (qq in Utils.userData.keys) {
-                        val rs = Utils.insert(qq)
+                    for (qq in Utils.userDealData.keys) {
+                        val rs = Jdbc.insert(qq)
                         if (rs == null) {
                             AccountBook.logger.info("数据库连接失败")
                             continue
@@ -54,7 +55,7 @@ class ThreadManager {
                 delay(nextCheckoutDay.timeInMillis - System.currentTimeMillis())
                 while (true) {
                     for (qq in Config.config.whiteList) {
-                        val rs = Utils.select(30, qq)
+                        val rs = Jdbc.select(30, qq)
                         if (rs == null) {
                             AccountBook.logger.info("用户 $qq, 数据库连接失败或对应表未找到")
                             continue

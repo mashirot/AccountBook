@@ -18,15 +18,16 @@ class Undo : SimpleCommand(AccountBook, "undo") {
         if (Utils.isUserInWhitelist(sender.subject!!.id)) {
             return
         }
-        if (Utils.userData.isEmpty() || !Utils.userData.containsKey(sender.subject!!.id)) {
+        if (Utils.userDealData.isEmpty() || !Utils.userDealData.containsKey(sender.subject!!.id)) {
             sender.sendMessage("Undo Failed, cause by qq not exist in map")
             return
         }
-        if (Utils.userData[sender.subject!!.id]!!.isEmpty()) {
+        if (Utils.userDealData[sender.subject!!.id]!!.isEmpty()) {
             sender.sendMessage("Undo Failed, cause by list is empty")
             return
         }
-        Utils.userData[sender.subject!!.id]!!.removeAt(Utils.userData.size - 1)
+        Utils.userBalance[sender.subject!!.id] = Utils.userBalance[sender.subject!!.id]!! + Utils.userDealData[sender.subject!!.id]!!.last().money
+        Utils.userDealData[sender.subject!!.id]!!.removeAt(Utils.userDealData.size - 1)
         sender.sendMessage("Undo Success")
     }
 

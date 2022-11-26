@@ -9,6 +9,7 @@ import ski.mashiro.command.*
 import ski.mashiro.file.Config
 import ski.mashiro.util.ThreadManager
 import ski.mashiro.util.Update
+import ski.mashiro.util.Utils
 
 object AccountBook : KotlinPlugin(
     JvmPluginDescription(
@@ -22,6 +23,7 @@ object AccountBook : KotlinPlugin(
 
     override fun onEnable() {
         Config.loadConfig()
+        Utils.getEachBalance()
         ThreadManager.startCoroutines()
         CommandManager.registerCommand(Disburse())
         CommandManager.registerCommand(Income())

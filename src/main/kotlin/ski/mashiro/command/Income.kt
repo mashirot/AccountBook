@@ -20,14 +20,16 @@ class Income: SimpleCommand(AccountBook, "+") {
         if (Utils.isUserInWhitelist(sender.subject!!.id)) {
             return
         }
-        if (!Utils.userData.containsKey(sender.subject!!.id)) {
+        if (!Utils.userDealData.containsKey(sender.subject!!.id)) {
             val dealData = Vector<Deal>(25)
             dealData.add(Deal(money))
-            Utils.userData[sender.subject!!.id] = dealData
+            Utils.userDealData[sender.subject!!.id] = dealData
+            Utils.userBalance[sender.subject!!.id] = Utils.userBalance[sender.subject!!.id]!! + money
             sender.sendMessage("Insert Success")
             return
         }
-        Utils.userData[sender.subject!!.id]!!.add(Deal(money))
+        Utils.userDealData[sender.subject!!.id]!!.add(Deal(money))
+        Utils.userBalance[sender.subject!!.id] = Utils.userBalance[sender.subject!!.id]!! + money
         sender.sendMessage("Insert Success")
     }
 
@@ -36,14 +38,16 @@ class Income: SimpleCommand(AccountBook, "+") {
         if (Utils.isUserInWhitelist(sender.subject!!.id)) {
             return
         }
-        if (!Utils.userData.containsKey(sender.subject!!.id)) {
+        if (!Utils.userDealData.containsKey(sender.subject!!.id)) {
             val dealData = Vector<Deal>(25)
             dealData.add(Deal(money, reason))
-            Utils.userData[sender.subject!!.id] = dealData
+            Utils.userDealData[sender.subject!!.id] = dealData
+            Utils.userBalance[sender.subject!!.id] = Utils.userBalance[sender.subject!!.id]!! + money
             sender.sendMessage("Insert Success")
             return
         }
-        Utils.userData[sender.subject!!.id]!!.add(Deal(money, reason))
+        Utils.userDealData[sender.subject!!.id]!!.add(Deal(money, reason))
+        Utils.userBalance[sender.subject!!.id] = Utils.userBalance[sender.subject!!.id]!! + money
         sender.sendMessage("Insert Success")
     }
 }

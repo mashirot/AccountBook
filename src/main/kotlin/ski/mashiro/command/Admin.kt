@@ -79,6 +79,7 @@ class Admin: CompositeCommand(
         }
         sender.sendMessage("已成功向数据库写入 ${rs.successNum} 个数据, ${rs.failedNum} 个写入失败")
     }
+    @SubCommand("setCheckoutDay")
     suspend fun setCheckoutDay(sender: CommandSender, day: Int) {
         if (sender.subject!!.id != Config.config.owner || sender.isNotConsole()) {
             sender.sendMessage("无权限")
@@ -87,6 +88,7 @@ class Admin: CompositeCommand(
         Config.config.checkoutDay = day
         sender.sendMessage("结算日期修改为：$day")
     }
+    @SubCommand("setBotQQ")
     suspend fun setBotQQ(sender: CommandSender, qq: Long) {
         if (sender.isNotConsole()) {
             sender.sendMessage("无权限")
@@ -95,6 +97,7 @@ class Admin: CompositeCommand(
         Config.config.bot = qq
         sender.sendMessage("BotQQ修改为：$qq")
     }
+    @SubCommand("setOwner")
     suspend fun setOwner(sender: CommandSender, qq: Long) {
         if (sender.isNotConsole()) {
             sender.sendMessage("无权限")

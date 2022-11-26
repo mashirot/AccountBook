@@ -10,7 +10,7 @@ import java.util.*
 
 class Jdbc {
     companion object {
-        fun insert(qq: Long) : InsertResult? {
+        fun insert(qq: Long): InsertResult? {
             val dealData = Utils.userDealData[qq] ?: return null
             Class.forName("com.mysql.cj.jdbc.Driver")
             val sql = "insert into tb_$qq (money, reason, date) values (?, ?, ?);"
@@ -55,6 +55,7 @@ class Jdbc {
         fun select(days: Int, qq: Long): SelectResult? {
             Class.forName("com.mysql.cj.jdbc.Driver")
             val sql = "select money from tb_$qq where date = ?;"
+            val sqlAll = "select money from tb_$qq;"
             val createSql = "CREATE TABLE IF NOT EXISTS `tb_$qq` (\n" +
                     "  `money` double NOT NULL,\n" +
                     "  `reason` varchar(50) NOT NULL,\n" +
@@ -76,10 +77,9 @@ class Jdbc {
                 connection.use {
                     val createStatement = connection.prepareStatement(createSql)
                     createStatement.use { createStatement.executeUpdate() }
-                    val prepareStatement = connection.prepareStatement(sql)
-                    prepareStatement.use {
-                        for (i in 1..days) {
-                            prepareStatement.setDate(1, Date(initTime.time.time))
+                    if (days == -1) {
+                        val prepareStatement = connection.prepareStatement(sqlAll)
+                        prepareStatement.use {
                             val result = prepareStatement.executeQuery()
                             result.use {
                                 while (result.next()) {
@@ -91,7 +91,25 @@ class Jdbc {
                                     outMoney += money
                                 }
                             }
-                            initTime.set(Calendar.DAY_OF_MONTH, initTime.get(Calendar.DAY_OF_MONTH) - 1)
+                        }
+                    } else {
+                        val prepareStatement = connection.prepareStatement(sql)
+                        prepareStatement.use {
+                            for (i in 1..days) {
+                                prepareStatement.setDate(1, Date(initTime.time.time))
+                                val result = prepareStatement.executeQuery()
+                                result.use {
+                                    while (result.next()) {
+                                        val money = result.getDouble("money")
+                                        if (money >= 0) {
+                                            inMoney += money
+                                            continue
+                                        }
+                                        outMoney += money
+                                    }
+                                }
+                                initTime.set(Calendar.DAY_OF_MONTH, initTime.get(Calendar.DAY_OF_MONTH) - 1)
+                            }
                         }
                     }
                 }

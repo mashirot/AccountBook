@@ -26,6 +26,7 @@ class ThreadManager {
                 delay(initTime.timeInMillis - System.currentTimeMillis())
                 while (true) {
                     if (Utils.userDealData.isEmpty()) {
+                        delay(24 * 60 * 60 * 1000L)
                         continue
                     }
                     for (qq in Utils.userDealData.keys) {
